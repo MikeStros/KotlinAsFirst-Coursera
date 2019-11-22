@@ -132,7 +132,30 @@ fun mean(list: List<Double>): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun center(list: MutableList<Double>): MutableList<Double> = TODO()
+fun center(list: MutableList<Double>): MutableList<Double> {
+    if (list.size == 0) {
+        return list
+    }
+
+    var srar: Double = 0.0
+    for (i in 0 until list.size) {
+        srar += list[i]
+    }
+    srar /= list.size;
+
+    for (i in 0 until list.size) {
+        list[i]-=srar;
+    }
+
+    println("Medium: $srar")
+    return list;
+}
+
+fun main(args: Array<String>) {
+    val list: MutableList<Double> = listOf(1.0, 2.0, 3.0, 4.0) as MutableList<Double>
+    val result = accumulate(list)
+    println("result: $result")
+}
 
 /**
  * Средняя
@@ -163,7 +186,25 @@ fun polynom(p: List<Double>, x: Double): Double = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Double>): MutableList<Double> = TODO()
+fun accumulate(list: MutableList<Double>): MutableList<Double> {
+    if (list.size == 0) {
+        return list
+    }
+
+    var curi = list.size-1
+    while (curi >= 0) {
+        var curi2 = curi-1
+        var prevsum: Double = 0.0
+        while (curi2 >= 0) {
+            prevsum += list[curi2]
+            curi2--;
+        }
+        list[curi] += prevsum
+        curi--;
+    }
+
+    return list
+}
 
 /**
  * Средняя

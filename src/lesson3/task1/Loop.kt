@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson3.task1
 
 import kotlin.math.sqrt
@@ -38,7 +39,7 @@ fun isPrime(n: Int): Boolean {
  */
 fun isPerfect(n: Int): Boolean {
     var sum = 1
-    for (m in 2..n/2) {
+    for (m in 2..n / 2) {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -132,7 +133,34 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var steps: Int = 0
+    var curx: Int = x
+
+    while (true) {
+        print("$curx ")
+        if (curx == 1) {
+            break
+        }
+        steps++
+        curx = collatzStepscheck(curx);
+    }
+    return steps
+}
+
+fun collatzStepscheck(x: Int): Int {
+    if ((x % 2) == 0) { // четное
+        return (x / 2)
+    } else { // нечетное
+        return (3 * x + 1)
+    }
+}
+
+
+fun main(args: Array<String>) {
+    val stps = collatzSteps(46)
+    println("steps: $stps")
+}
 
 /**
  * Средняя

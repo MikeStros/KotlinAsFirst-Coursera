@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import lesson6.task1.dateDigitToStr
 import java.io.File
 
 /**
@@ -32,8 +33,7 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
                 if (word.length + currentLineLength >= lineLength) {
                     outputStream.newLine()
                     currentLineLength = 0
-                }
-                else {
+                } else {
                     outputStream.write(" ")
                     currentLineLength++
                 }
@@ -45,6 +45,100 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
     outputStream.close()
 }
 
+
+fun main(args: Array<String>) {
+    //val result = countSubstrings("C:/Keil_v5/test.txt", listOf("test", "проверка"))
+    val result = top20Words("C:/Keil_v5/test.txt")
+
+
+    println("$result")
+}
+
+/**
+ * Средняя
+ *
+ * Во входном файле с именем inputName содержится некоторый текст (в том числе, и на русском языке).
+ *
+ * Вернуть ассоциативный массив, содержащий 20 наиболее часто встречающихся слов с их количеством.
+ * Если в тексте менее 20 различных слов, вернуть все слова.
+ *
+ * Словом считается непрерывная последовательность из букв (кириллических,
+ * либо латинских, без знаков препинания и цифр).
+ * Цифры, пробелы, знаки препинания считаются разделителями слов:
+ * Привет, привет42, привет!!! -привет?!
+ * ^ В этой строчке слово привет встречается 4 раза.
+ *
+ * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
+ * Ключи в ассоциативном массиве должны быть в нижнем регистре.
+ *
+ */
+fun top20Words(inputName: String): Map<String, Int> {
+    var arrayOut: MutableMap<String, Int> = mutableMapOf()
+    var arrayOut3: MutableMap<String, Int> = mutableMapOf()
+    var resultcount: Int = 0
+
+    for (line in File(inputName).readLines()) {
+        val separate = line.split("[^a-zA-Zа-яА-ЯёЁ]".toRegex())
+        for (word in separate) {
+            if (word != "") {
+                var lcase = word.toLowerCase();
+
+                if (arrayOut[lcase] == null) {
+                    arrayOut[lcase] = 1
+                } else {
+                    var temp: Int = arrayOut[lcase]!!
+                    temp++
+                    arrayOut[lcase] = temp
+
+                    //arrayOut[lcase]!!.plus(1)
+                    println(lcase)
+                }
+
+                /*
+                resultcount = 0
+                for ((word2, count) in arrayOut) {
+                    if (word2.toLowerCase() == word.toLowerCase()) {
+                        resultcount++
+                    }
+                }
+                var lcase = word.toLowerCase();
+
+                if (arrayOut[lcase] == null) {
+                    arrayOut[lcase] = resultcount
+                } else {
+                    //var temp: Int = arrayOut[lcase].toInt()
+                    //temp += resultcount
+                    //arrayOut[lcase] = temp
+
+                    arrayOut[lcase]!!.plus(resultcount)
+                    println(lcase)
+                }
+                */
+            }
+        }
+    }
+
+    var arrayOut2 = arrayOut.toList()
+            .sortedByDescending { (key, value) -> value }
+            .toMap()
+
+    var maxcount = 0;
+    for ((text, count) in arrayOut2) {
+        if (maxcount < 20) {
+            arrayOut3[text]=count
+            maxcount++
+
+        } else {
+            break
+        }
+    }
+
+    //println("test")
+
+    return arrayOut3
+}
+
+
 /**
  * Средняя
  *
@@ -54,7 +148,20 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    var arrayOut: MutableMap<String, Int> = mutableMapOf()
+    var resultcount: Int = 0
+
+    for (text in substrings) {
+        resultcount = 0
+        for (line in File(inputName).readLines()) {
+            var result = Regex("$text", RegexOption.IGNORE_CASE).findAll(line, 0)
+            resultcount += result.count()
+        }
+        arrayOut[text] = resultcount
+    }
+    return arrayOut
+}
 
 
 /**
@@ -126,25 +233,6 @@ fun alignFileByWidth(inputName: String, outputName: String) {
     TODO()
 }
 
-/**
- * Средняя
- *
- * Во входном файле с именем inputName содержится некоторый текст (в том числе, и на русском языке).
- *
- * Вернуть ассоциативный массив, содержащий 20 наиболее часто встречающихся слов с их количеством.
- * Если в тексте менее 20 различных слов, вернуть все слова.
- *
- * Словом считается непрерывная последовательность из букв (кириллических,
- * либо латинских, без знаков препинания и цифр).
- * Цифры, пробелы, знаки препинания считаются разделителями слов:
- * Привет, привет42, привет!!! -привет?!
- * ^ В этой строчке слово привет встречается 4 раза.
- *
- * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
- * Ключи в ассоциативном массиве должны быть в нижнем регистре.
- *
- */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
 
 /**
  * Средняя
@@ -243,15 +331,15 @@ Suspendisse ~~et elit in enim tempus iaculis~~.
  *
  * Соответствующий выходной файл:
 <html>
-    <body>
-        <p>
-            Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
-            Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
-        </p>
-        <p>
-            Suspendisse <s>et elit in enim tempus iaculis</s>.
-        </p>
-    </body>
+<body>
+<p>
+Lorem ipsum <i>dolor sit amet</i>, consectetur <b>adipiscing</b> elit.
+Vestibulum lobortis. <s>Est vehicula rutrum <i>suscipit</i></s>, ipsum <s>lib</s>ero <i>placerat <b>tortor</b></i>.
+</p>
+<p>
+Suspendisse <s>et elit in enim tempus iaculis</s>.
+</p>
+</body>
 </html>
  *
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -294,67 +382,67 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
  *
  * Пример входного файла:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
-* Утка по-пекински
-    * Утка
-    * Соус
-* Салат Оливье
-    1. Мясо
-        * Или колбаса
-    2. Майонез
-    3. Картофель
-    4. Что-то там ещё
-* Помидоры
-* Фрукты
-    1. Бананы
-    23. Яблоки
-        1. Красные
-        2. Зелёные
+ * Утка по-пекински
+ * Утка
+ * Соус
+ * Салат Оливье
+1. Мясо
+ * Или колбаса
+2. Майонез
+3. Картофель
+4. Что-то там ещё
+ * Помидоры
+ * Фрукты
+1. Бананы
+23. Яблоки
+1. Красные
+2. Зелёные
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  *
  *
  * Соответствующий выходной файл:
 ///////////////////////////////начало файла/////////////////////////////////////////////////////////////////////////////
 <html>
-  <body>
-    <ul>
-      <li>
-        Утка по-пекински
-        <ul>
-          <li>Утка</li>
-          <li>Соус</li>
-        </ul>
-      </li>
-      <li>
-        Салат Оливье
-        <ol>
-          <li>Мясо
-            <ul>
-              <li>
-                  Или колбаса
-              </li>
-            </ul>
-          </li>
-          <li>Майонез</li>
-          <li>Картофель</li>
-          <li>Что-то там ещё</li>
-        </ol>
-      </li>
-      <li>Помидоры</li>
-      <li>
-        Фрукты
-        <ol>
-          <li>Бананы</li>
-          <li>
-            Яблоки
-            <ol>
-              <li>Красные</li>
-              <li>Зелёные</li>
-            </ol>
-          </li>
-        </ol>
-      </li>
-    </ul>
-  </body>
+<body>
+<ul>
+<li>
+Утка по-пекински
+<ul>
+<li>Утка</li>
+<li>Соус</li>
+</ul>
+</li>
+<li>
+Салат Оливье
+<ol>
+<li>Мясо
+<ul>
+<li>
+Или колбаса
+</li>
+</ul>
+</li>
+<li>Майонез</li>
+<li>Картофель</li>
+<li>Что-то там ещё</li>
+</ol>
+</li>
+<li>Помидоры</li>
+<li>
+Фрукты
+<ol>
+<li>Бананы</li>
+<li>
+Яблоки
+<ol>
+<li>Красные</li>
+<li>Зелёные</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+</body>
 </html>
 ///////////////////////////////конец файла//////////////////////////////////////////////////////////////////////////////
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
@@ -381,23 +469,23 @@ fun markdownToHtml(inputName: String, outputName: String) {
  * Вывести в выходной файл процесс умножения столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 111):
-   19935
-*    111
+19935
+ *    111
 --------
-   19935
+19935
 + 19935
 +19935
 --------
- 2212785
+2212785
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  * Нули в множителе обрабатывать так же, как и остальные цифры:
-  235
-*  10
+235
+ *  10
 -----
-    0
+0
 +235
 -----
- 2350
+2350
  *
  */
 fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
@@ -411,16 +499,16 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  * Вывести в выходной файл процесс деления столбиком числа lhv (> 0) на число rhv (> 0).
  *
  * Пример (для lhv == 19935, rhv == 22):
-  19935 | 22
- -198     906
- ----
-    13
-    -0
-    --
-    135
-   -132
-   ----
-      3
+19935 | 22
+-198     906
+----
+13
+-0
+--
+135
+-132
+----
+3
 
  * Используемые пробелы, отступы и дефисы должны в точности соответствовать примеру.
  *

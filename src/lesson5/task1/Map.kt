@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import com.sun.xml.internal.ws.policy.privateutil.LocalizationMessages
+
 /**
  * Пример
  *
@@ -94,7 +96,129 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *     mapOf("Emergency" to "911", "Police" to "02")
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
-fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> = TODO()
+
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>) : Map<String, String> = TODO()
+/*
+fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
+    var phoneBookOut: MutableMap<String, String> = mutableMapOf()
+    var foundNum: String = ""
+    var foundName: String = ""
+
+    for ((nameA, phoneA) in mapA) {
+        foundNum = ""
+        foundName = ""
+        for ((nameB, phoneB) in mapB) {
+            if (nameA == nameB && phoneA != phoneB) {
+                foundNum = phoneB
+                foundName = nameB
+            }
+        }
+
+        if (foundNum == "") {
+            phoneBookOut[nameA] = phoneA
+        } else {
+            phoneBookOut[nameA] = "$phoneA, $foundNum"
+        }
+    }
+
+    for ((nameB, phoneB) in mapB) {
+        foundNum = ""
+        foundName = ""
+        for ((nameA, phoneA) in mapA) {
+            if (nameA == nameB) {
+                foundNum = phoneB
+                foundName = nameB
+            }
+        }
+
+        if (foundNum == "") {
+            phoneBookOut[nameB] = phoneB
+        }
+    }
+
+
+    return phoneBookOut
+}
+*/
+
+/**
+ * Средняя
+ *
+ * Найти в заданном списке повторяющиеся элементы и вернуть
+ * ассоциативный массив с информацией о числе повторений
+ * для каждого повторяющегося элемента.
+ * Если элемент встречается только один раз, включать его в результат
+ * не следует.
+ *
+ * Например:
+ *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
+ */
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    var arrayOut: MutableMap<String, Int> = mutableMapOf()
+
+    var count: Int = 0
+    for (item in list) {
+        count = 0
+        for (item2 in list) {
+            if (item2 == item) {
+                count++
+            }
+        }
+        if (count > 1) {
+            arrayOut[item] = count
+        }
+    }
+
+    return arrayOut
+}
+
+
+/**
+ * Средняя
+ *
+ * Для заданного списка пар "акция"-"стоимость" вернуть ассоциативный массив,
+ * содержащий для каждой акции ее усредненную стоимость.
+ *
+ * Например:
+ *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
+ *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
+ */
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> {
+    var arrayOut: MutableMap<String, Double> = mutableMapOf()
+
+    var count: Double = 0.0
+    var sumprice: Double = 0.0
+
+    for ((name, price) in stockPrices) {
+        count = 0.0
+        sumprice = 0.0
+
+        for ((name2, price2) in stockPrices) {
+            if (name2 == name) {
+                count += 1
+                sumprice += price2
+            }
+        }
+
+        arrayOut[name] = sumprice / count
+    }
+
+    return arrayOut
+}
+
+
+fun main(args: Array<String>) {
+    //var phoneBook1: Map<String, String> = mapOf("Emergency" to "112", "Police" to "02")
+    //var phoneBook2: Map<String, String> = mapOf("Emergency" to "911", "Police" to "02")
+    //var resultPhonebook: Map<String, String> = mergePhoneBooks(phoneBook1, phoneBook2)
+    //println("result: $resultPhonebook")
+
+    //var result: Map<String, Int> = extractRepeats(listOf("a", "b", "a"))
+
+    var result: Map<String, Double> = averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
+    println("result: $result")
+}
+
 
 /**
  * Простая
@@ -120,17 +244,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  */
 fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
 
-/**
- * Средняя
- *
- * Для заданного списка пар "акция"-"стоимость" вернуть ассоциативный массив,
- * содержащий для каждой акции ее усредненную стоимость.
- *
- * Например:
- *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
- *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
- */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+
 
 /**
  * Средняя
@@ -211,19 +325,6 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
 
-/**
- * Средняя
- *
- * Найти в заданном списке повторяющиеся элементы и вернуть
- * ассоциативный массив с информацией о числе повторений
- * для каждого повторяющегося элемента.
- * Если элемент встречается только один раз, включать его в результат
- * не следует.
- *
- * Например:
- *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
- */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
 
 /**
  * Средняя

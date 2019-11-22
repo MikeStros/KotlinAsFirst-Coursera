@@ -2,6 +2,11 @@
 
 package lesson6.task1
 
+import kotlinx.html.InputType
+import java.io.IOException
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 /**
  * Пример
  *
@@ -43,20 +48,10 @@ fun timeSecondsToStr(seconds: Int): String {
  * Пример: консольный ввод
  */
 fun main(args: Array<String>) {
-    println("Введите время в формате ЧЧ:ММ:СС")
-    val line = readLine()
-    if (line != null) {
-        val seconds = timeStrToSeconds(line)
-        if (seconds == -1) {
-            println("Введённая строка $line не соответствует формату ЧЧ:ММ:СС")
-        }
-        else {
-            println("Прошло секунд с начала суток: $seconds")
-        }
-    }
-    else {
-        println("Достигнут <конец файла> в процессе чтения строки. Программа прервана")
-    }
+    //val result = dateStrToDigit("28 февраля 4269100")
+    val result = dateDigitToStr("30.02.2016")
+
+    println("$result")
 }
 
 
@@ -71,7 +66,87 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    var outString: String = ""
+    var parts = str.split(" ")
+    var month = 0
+    var maxdate = 31
+
+    if (parts.count()!=3) { return outString }
+    if (parts[1] == "января") {
+        month = 1
+        maxdate = 31
+    }
+    if (parts[1] == "февраля") {
+
+        month = 2
+        if (parts[2].toInt() % 4 == 0) {
+            if (parts[2].toInt() % 100 == 0) {
+                if (parts[2].toInt() % 400 == 0) {
+                    maxdate = 29
+                } else {
+                    maxdate = 28
+                }
+            } else {
+                maxdate = 29
+            }
+        } else {
+            maxdate = 28
+        }
+    }
+    if (parts[1] == "марта") {
+        month = 3
+        maxdate = 31
+    }
+    if (parts[1] == "апреля") {
+        month = 4
+        maxdate = 30
+    }
+    if (parts[1] == "мая") {
+        month = 5
+        maxdate = 31
+    }
+    if (parts[1] == "июня") {
+        month = 6
+        maxdate = 30
+    }
+    if (parts[1] == "июля") {
+        month = 7
+        maxdate = 31
+    }
+    if (parts[1] == "августа") {
+        month = 8
+        maxdate = 31
+    }
+    if (parts[1] == "сентября") {
+        month = 9
+        maxdate = 30
+    }
+    if (parts[1] == "октября") {
+        month = 10
+        maxdate = 31
+    }
+    if (parts[1] == "ноября") {
+        month = 11
+        maxdate = 30
+    }
+    if (parts[1] == "декабря") {
+        month = 12
+        maxdate = 31
+    }
+    if (month == 0 || parts[0].toInt() > maxdate) {
+        return outString
+    }
+
+    //var date = LocalDate.of(parts[2].toInt(), month, parts[0].toInt()) ?: return(outString)
+    //var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    //var formattedDate = date.format(formatter)
+    if (parts[0].toInt() in 0..9) outString = "0" + parts[0].toInt() else outString = ""+parts[0].toInt()
+    if (month in 0..9) outString = "$outString.0$month" else outString = "$outString.$month"
+    outString = outString + "." + parts[2]
+
+    return outString
+}
 
 /**
  * Средняя
@@ -83,7 +158,83 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    var outString: String = ""
+    var parts = digital.split(".")
+    var month = ""
+    var maxdate = 31
+
+    if (parts.count()!=3) { return outString }
+
+    if (parts[1] == "01") {
+        month = "января"
+        maxdate = 31
+    }
+    if (parts[1] == "02") {
+
+        month = "февраля"
+        if (parts[2].toInt() % 4 == 0) {
+            if (parts[2].toInt() % 100 == 0) {
+                if (parts[2].toInt() % 400 == 0) {
+                    maxdate = 29
+                } else {
+                    maxdate = 28
+                }
+            } else {
+                maxdate = 29
+            }
+        } else {
+            maxdate = 28
+        }
+    }
+    if (parts[1] == "03") {
+        month = "марта"
+        maxdate = 31
+    }
+    if (parts[1] == "04") {
+        month = "апреля"
+        maxdate = 30
+    }
+    if (parts[1] == "05") {
+        month = "мая"
+        maxdate = 31
+    }
+    if (parts[1] == "06") {
+        month = "июня"
+        maxdate = 30
+    }
+    if (parts[1] == "07") {
+        month = "июля"
+        maxdate = 31
+    }
+    if (parts[1] == "08") {
+        month = "августа"
+        maxdate = 31
+    }
+    if (parts[1] == "09") {
+        month = "сентября"
+        maxdate = 30
+    }
+    if (parts[1] == "10") {
+        month = "октября"
+        maxdate = 31
+    }
+    if (parts[1] == "11") {
+        month = "ноября"
+        maxdate = 30
+    }
+    if (parts[1] == "12") {
+        month = "декабря"
+        maxdate = 31
+    }
+    if (month == "" || parts[0].toInt() > maxdate) {
+        return outString
+    }
+
+    outString = ""+ parts[0].toInt() + " $month " + parts[2]
+
+    return outString
+}
 
 /**
  * Средняя
